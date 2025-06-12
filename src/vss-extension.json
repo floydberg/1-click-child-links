@@ -1,14 +1,14 @@
 {
     "manifestVersion": 1.0,    
-    "id": "vsts-work-item-one-click-child-links",    
-    "version": "0.12.1",
-    "name": "1-Click Child-Links",
-    "description": "Add Child-Links from pre-defined templates with a single click.",
+    "id": "task-spawner",    
+    "version": "0.0.6",
+    "name": "TaskSpawner",
+    "description": "Add Child work items from pre-defined templates.",
     "public": false,
-    "publisher": "ruifig",
+    "publisher": "cycleops",
     "repository": {
         "type": "git",
-        "uri": "https://github.com/figueiredorui/1-click-child-links"
+        "uri": "https://github.com/floydberg/1-click-child-links"
     },
     "icons": {
         "default": "img/one-click.png"
@@ -28,7 +28,7 @@
         "Tasks"
     ],
     "categories": [
-        "Plan and track"
+        "Azure Boards"
     ],
     "content": {
         "details": {
@@ -64,21 +64,21 @@
     ],
     "contributions": [
         {
-            "id": "create-child-task-work-item-button",
+            "id": "task-spawner-button",
             "type": "ms.vss-web.action",
-            "description": "1-Click Child-Links",
+            "description": "TaskSpawner",
             "targets": [
                 "ms.vss-work-web.work-item-toolbar-menu", 
                 "ms.vss-work-web.backlog-item-menu",
                 "ms.vss-work-web.work-item-context-menu"
             ],
             "properties": {
-                "text": " 1-Click Child-Links",
-                "title": "1-Click Child-Links",
-                "toolbarText": "1-Click Child-Links",                
+                "text": "Spawn tasks",
+                "title": "Spawn tasks",
+                "toolbarText": "Spawn tasks",                
                 "icon": "img/one-click16.png",
                 "uri": "toolbar.html",
-                "registeredObjectId": "create-child-task-work-item-button"
+                "registeredObjectId": "task-spawner-button"
             }
         }
     ]

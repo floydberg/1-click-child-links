@@ -115,4 +115,4 @@ In order to debug the extension using Visual Studio or Browser Developer Tools a
 
 ## Credits ##
 
-Clone from https://github.com/cschleiden/vsts-extension-ts-seed-simple
+Clone from https://github.com/figueiredorui/1-click-child-links
