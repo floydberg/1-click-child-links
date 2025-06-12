@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1.0,    
     "id": "task-spawner",    
-    "version": "0.0.6",
+    "version": "0.0.13",
     "name": "TaskSpawner",
     "description": "Add Child work items from pre-defined templates.",
     "public": false,
@@ -78,7 +78,8 @@
                 "toolbarText": "Spawn tasks",                
                 "icon": "img/one-click16.png",
                 "uri": "toolbar.html",
-                "registeredObjectId": "task-spawner-button"
+                "registeredObjectId": "task-spawner-button",
+                "visibleWhen": "workItemTypeName == 'Bug' || workItemTypeName == 'Product Backlog Item'"
             }
         }
     ]

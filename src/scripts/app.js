@@ -133,17 +133,41 @@ define(["TFS/WorkItemTracking/Services", "TFS/WorkItemTracking/RestClient", "TFS
 
                     //Add relation
                     if (service != null) {
-                        service.addWorkItemRelations([
-                            {
-                                rel: "System.LinkTypes.Hierarchy-Forward",
-                                url: response.url,
-                            }]);
-                        //Save
-                        service.beginSaveWorkItem(function (response) {
-                            // saved
-                        }, function (error) {
-                            ShowDialog(" Error beginSaveWorkItem: " + error);
-                            WriteError("createWorkItem " + error);
+                        service.getWorkItemRelations().then(function(relations) {
+                            var alreadyLinked = relations.some(function(rel) {
+                                return rel.rel === "System.LinkTypes.Hierarchy-Forward" && rel.url === response.url;
+                            });
+                            if (!alreadyLinked) {
+                                service.addWorkItemRelations([
+                                    {
+                                        rel: "System.LinkTypes.Hierarchy-Forward",
+                                        url: response.url,
+                                    }
+                                ]);
+                                service.beginSaveWorkItem(function (response) {
+                                    // saved
+                                }, function (error) {
+                                    // Improved error logging for debugging
+                                    console.error("beginSaveWorkItem error object:", error);
+                                    let errorMsg = "Unknown error";
+                                    if (error) {
+                                        if (error.message) {
+                                            errorMsg = error.message;
+                                        } else if (error.statusText) {
+                                            errorMsg = error.statusText;
+                                        } else if (typeof error === "string") {
+                                            errorMsg = error;
+                                        } else {
+                                            errorMsg = JSON.stringify(error, null, 2);
+                                        }
+                                    }
+                                    ShowDialog("Error beginSaveWorkItem: " + errorMsg);
+                                    WriteError("createWorkItem beginSaveWorkItem error: " + errorMsg);
+                                });
+                            } else {
+                                // Optionally notify the user the link already exists
+                                ShowDialog("This child link already exists.");
+                            }
                         });
                     } else {
                         //save using RestClient
@@ -452,7 +476,7 @@ define(["TFS/WorkItemTracking/Services", "TFS/WorkItemTracking/RestClient", "TFS
         function ShowDialog(message) {
 
             var dialogOptions = {
-                title: "1-Click Child-Links",
+                title: "Task Spawner",
                 width: 300,
                 height: 200,
                 resizable: false,
@@ -481,15 +505,15 @@ define(["TFS/WorkItemTracking/Services", "TFS/WorkItemTracking/RestClient", "TFS
         }
 
         function WriteTrace(msg) {
-            console.log('1-Click Child-Links: ' + msg);
+            console.log('Task Spawner: ' + msg);
         }
 
         function WriteLog(msg) {
-            console.log('1-Click Child-Links: ' + msg);
+            console.log('Task Spawner: ' + msg);
         }
 
         function WriteError(msg) {
-            console.error('1-Click Child-Links: ' + msg);
+            console.error('Task Spawner: ' + msg);
         }
 
         function extractJSON(str) {
@@ -551,7 +575,7 @@ define(["TFS/WorkItemTracking/Services", "TFS/WorkItemTracking/RestClient", "TFS
         return {
 
             create: function (context) {
-                WriteLog('init v0.12.1');
+                WriteLog('init v0.x.x');
 
                 ctx = VSS.getWebContext();
 
