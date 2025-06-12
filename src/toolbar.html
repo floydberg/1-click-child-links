@@ -1,41 +1,36 @@
-
 <!DOCTYPE html>
 <html>
-
 <head>
     <title></title>
     <meta charset="utf-8" />
     <script src="lib/VSS.SDK.min.js"></script>
 </head>
-
 <body>
-
     <script>
-    VSS.init();
+        VSS.init();
 
-    var createChildTask = (function() {
-        "use strict";
-        return {
-            createTasks: function(actionContext) {
-            
-                 VSS.require(["scripts/app"], function (app) {
-                    app.create(actionContext);
-                    });
-                },
-                
+        var createChildTask = {
             execute: function(actionContext) {
-                this.createTasks(actionContext);
+                console.log("Task Spawner: execute called", actionContext);
+                VSS.require([
+                    "scripts/app"
+                ], function (app) {
+                    app.create(actionContext);
+                });
             }
-        }
-            
-        }());
+        };
 
         VSS.register("task-spawner-button", function (context) {
-            return createChildTask;
+            var type = context && (context.workItemTypeName || context.workItemType);
+            if (type === "Bug" || type === "Product Backlog Item") {
+                return createChildTask;
+            }
+            return {
+                execute: function() {
+                    alert("This action is not available for work item type: " + type);
+                }
+            };
         });
-             
     </script>
-
-       
 </body>
 </html>
